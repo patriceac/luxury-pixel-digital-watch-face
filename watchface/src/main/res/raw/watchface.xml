@@ -1,117 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <WatchFace width="450" height="450" clipShape="CIRCLE">
-    <Metadata key="CLOCK_TYPE" value="ANALOG" />
+    <Metadata key="CLOCK_TYPE" value="DIGITAL" />
     <Metadata key="PREVIEW_TIME" value="10:10:32" />
     <Metadata key="STEP_GOAL" value="10000" />
 
     <Scene>
-        <PartImage x="0" y="0" width="450" height="450">
-            <Image resource="dial_background" />
-        </PartImage>
-
-        <AnalogClock x="0" y="0" width="450" height="450">
-            <HourHand
-                resource="hour_hand"
-                x="207"
-                y="101"
-                width="36"
-                height="140"
-                pivotX="0.5"
-                pivotY="0.884" />
-            <MinuteHand
-                resource="minute_hand"
-                x="209"
-                y="68"
-                width="33"
-                height="176"
-                pivotX="0.5"
-                pivotY="0.890" />
-            <SecondHand
-                resource="second_hand"
-                x="221"
-                y="53"
-                width="8"
-                height="206"
-                pivotX="0.5"
-                pivotY="0.836">
-                <Variant mode="AMBIENT" target="alpha" value="0" />
-                <Sweep frequency="15" />
-            </SecondHand>
-        </AnalogClock>
-
-        <PartText x="160" y="95" width="132" height="34">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="26" color="#FFE09E" weight="LIGHT">
-                    <Upper>
-                        <Template><![CDATA[%s]]>
-                            <Parameter expression="[DAY_OF_WEEK_S]" />
-                        </Template>
-                    </Upper>
-                </Font>
-            </Text>
-        </PartText>
-
         <PartDraw x="0" y="0" width="450" height="450">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
-            <Line startX="165" startY="132" endX="285" endY="132">
-                <Stroke color="#E2AB5B" thickness="1.6" />
-            </Line>
+            <Rectangle x="0" y="0" width="450" height="450">
+                <Fill color="#000000">
+                    <RadialGradient
+                        centerX="225"
+                        centerY="210"
+                        radius="238"
+                        colors="#FF201E1A #FF090807 #FF000000"
+                        positions="0.0 0.58 1.0" />
+                </Fill>
+            </Rectangle>
+            <Ellipse x="7" y="7" width="436" height="436">
+                <Stroke color="#D8B56A" thickness="2.2" />
+            </Ellipse>
+            <Ellipse x="12" y="12" width="426" height="426">
+                <Stroke color="#6B4F24" thickness="0.8" />
+            </Ellipse>
         </PartDraw>
 
-        <PartText x="137" y="130" width="176" height="41">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
+        <PartText x="62" y="64" width="326" height="44">
+            <Localization />
             <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="29" color="#FFE09E" weight="THIN">
+                <Font family="SYNC_TO_DEVICE" size="29" color="#E9C579" weight="LIGHT">
                     <Upper>
-                        <Template><![CDATA[%s %d]]>
-                            <Parameter expression="[MONTH_S]" />
-                            <Parameter expression="[DAY]" />
+                        <Template><![CDATA[%s]]>
+                            <Parameter expression="icuBestText(&quot;EEE MMM d&quot;)" />
                         </Template>
                     </Upper>
                 </Font>
             </Text>
         </PartText>
 
-        <PartImage x="112" y="173" width="31" height="25">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
+        <DigitalClock x="0" y="92" width="450" height="160">
+            <Localization timeZone="SYNC_TO_DEVICE" />
+            <TimeText
+                x="0"
+                y="0"
+                width="450"
+                height="160"
+                format="hh:mm"
+                hourFormat="SYNC_TO_DEVICE"
+                align="CENTER"
+                hint="DIGITAL_CLOCK_TIME">
+                <Font family="SYNC_TO_DEVICE" size="136" color="#FFF4DC" weight="MEDIUM" />
+            </TimeText>
+        </DigitalClock>
+
+        <Condition>
+            <Expressions>
+                <Expression name="usesTwelveHour"><![CDATA[[IS_24_HOUR_MODE] == false]]></Expression>
+            </Expressions>
+            <Compare expression="usesTwelveHour">
+                <PartText x="374" y="234" width="50" height="20">
+                    <Localization />
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="14" color="#E9C579" weight="LIGHT">
+                            <Template><![CDATA[%s]]>
+                                <Parameter expression="[AMPM_STRING]" />
+                            </Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Compare>
+        </Condition>
+
+        <PartDraw x="0" y="0" width="450" height="450">
+            <Line startX="24" startY="260" endX="426" endY="260">
+                <Stroke color="#C89D47" thickness="1.1" />
+            </Line>
+            <Ellipse x="221.5" y="257.5" width="7" height="7">
+                <Fill color="#FFE1A0" />
+            </Ellipse>
+        </PartDraw>
+
+        <PartDraw x="0" y="0" width="450" height="450">
+            <Line startX="174" startY="325" endX="174" endY="363">
+                <Stroke color="#D8B56A" thickness="1" />
+            </Line>
+            <Ellipse x="171.5" y="342.5" width="5" height="5">
+                <Fill color="#D8B56A" />
+            </Ellipse>
+            <Line startX="276" startY="325" endX="276" endY="363">
+                <Stroke color="#D8B56A" thickness="1" />
+            </Line>
+            <Ellipse x="273.5" y="342.5" width="5" height="5">
+                <Fill color="#D8B56A" />
+            </Ellipse>
+        </PartDraw>
+
+        <PartImage x="110" y="305" width="28" height="23">
             <Image resource="steps_icon" />
         </PartImage>
-
-        <PartImage x="314" y="172" width="20" height="29">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
+        <PartImage x="215" y="303" width="20" height="29">
             <Image resource="battery_icon" />
         </PartImage>
-
-        <PartImage x="213" y="280" width="24" height="21">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
+        <PartImage x="314" y="305" width="24" height="21">
             <Image resource="heart_icon" />
         </PartImage>
 
-        <PartText x="66" y="196" width="136" height="43">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
+        <PartText x="82" y="331" width="84" height="31">
             <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="38" color="#FFFFFF" weight="LIGHT">
-                    <Template><![CDATA[%d]]>
+                <Font family="SYNC_TO_DEVICE" size="27" color="#FFFFFF" weight="LIGHT">
+                    <Template><![CDATA[%,d]]>
                         <Parameter expression="[STEP_COUNT]" />
                     </Template>
                 </Font>
             </Text>
         </PartText>
 
-        <PartText x="68" y="233" width="120" height="31">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
+        <PartText x="183" y="331" width="84" height="31">
             <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="23" color="#FFF29D" weight="LIGHT">
-                    <Template><![CDATA[STEPS]]></Template>
-                </Font>
-            </Text>
-        </PartText>
-
-        <PartText x="263" y="196" width="124" height="43">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="38" color="#FFFFFF" weight="LIGHT">
+                <Font family="SYNC_TO_DEVICE" size="27" color="#FFFFFF" weight="LIGHT">
                     <Template><![CDATA[%d%%]]>
                         <Parameter expression="[BATTERY_PERCENT]" />
                     </Template>
@@ -119,19 +124,9 @@
             </Text>
         </PartText>
 
-        <PartText x="262" y="233" width="126" height="31">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
+        <PartText x="284" y="331" width="84" height="31">
             <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="21" color="#FFF29D" weight="LIGHT">
-                    <Template><![CDATA[BATTERY]]></Template>
-                </Font>
-            </Text>
-        </PartText>
-
-        <PartText x="180" y="302" width="90" height="40">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="37" color="#FFFFFF" weight="LIGHT">
+                <Font family="SYNC_TO_DEVICE" size="27" color="#FFFFFF" weight="LIGHT">
                     <Template><![CDATA[%.0f]]>
                         <Parameter expression="[HEART_RATE]" />
                     </Template>
@@ -139,17 +134,56 @@
             </Text>
         </PartText>
 
-        <PartText x="190" y="336" width="70" height="28">
-            <Variant mode="AMBIENT" target="alpha" value="0" />
-            <Text align="CENTER" maxLines="1">
-                <Font family="SYNC_TO_DEVICE" size="21" color="#FFF29D" weight="LIGHT">
-                    <Template><![CDATA[BPM]]></Template>
-                </Font>
-            </Text>
-        </PartText>
-
-        <PartImage x="203" y="203" width="44" height="44">
-            <Image resource="center_pin" />
-        </PartImage>
+        <Condition>
+            <Expressions>
+                <Expression name="isFrench"><![CDATA[subText([LANGUAGE_LOCALE_NAME], 0, 2) == "fr"]]></Expression>
+            </Expressions>
+            <Compare expression="isFrench">
+                <PartText x="88" y="356" width="72" height="21">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="13" color="#E9C579" weight="LIGHT">
+                            <Template><![CDATA[PAS]]></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+                <PartText x="187" y="356" width="76" height="21">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="13" color="#E9C579" weight="LIGHT">
+                            <Template><![CDATA[BATTERIE]]></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+                <PartText x="291" y="356" width="70" height="21">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="13" color="#E9C579" weight="LIGHT">
+                            <Template><![CDATA[BPM]]></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Compare>
+            <Default>
+                <PartText x="88" y="356" width="72" height="21">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="13" color="#E9C579" weight="LIGHT">
+                            <Template><![CDATA[STEPS]]></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+                <PartText x="187" y="356" width="76" height="21">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="13" color="#E9C579" weight="LIGHT">
+                            <Template><![CDATA[BATTERY]]></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+                <PartText x="291" y="356" width="70" height="21">
+                    <Text align="CENTER" maxLines="1">
+                        <Font family="SYNC_TO_DEVICE" size="13" color="#E9C579" weight="LIGHT">
+                            <Template><![CDATA[BPM]]></Template>
+                        </Font>
+                    </Text>
+                </PartText>
+            </Default>
+        </Condition>
     </Scene>
 </WatchFace>

@@ -6,41 +6,38 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RadialGradient;
 import android.graphics.RectF;
+import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.view.View;
 
 import com.cyberpat.luxurypixel.watchface.preview.R;
 
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
 final class WffPreviewView extends View {
     private static final float WFF_SIZE = 450f;
-    private static final int SAMPLE_STEPS = 25000;
+    private static final int SAMPLE_STEPS = 7645;
     private static final int SAMPLE_BATTERY = 78;
-    private static final int SAMPLE_HEART_RATE = 120;
+    private static final int SAMPLE_HEART_RATE = 72;
 
-    private final Bitmap dialBackground;
-    private final Bitmap hourHand;
-    private final Bitmap minuteHand;
-    private final Bitmap secondHand;
-    private final Bitmap centerPin;
     private final Bitmap stepsIcon;
     private final Bitmap batteryIcon;
     private final Bitmap heartIcon;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.DITHER_FLAG);
     private final Typeface light = Typeface.create("sans-serif-light", Typeface.NORMAL);
-    private final Typeface thin = Typeface.create("sans-serif-thin", Typeface.NORMAL);
+    private final Typeface medium = Typeface.create("sans-serif-medium", Typeface.NORMAL);
+    private final Calendar sampleTime = Calendar.getInstance();
 
     WffPreviewView(Context context) {
         super(context);
         setKeepScreenOn(true);
-        dialBackground = bitmap(R.drawable.dial_background);
-        hourHand = bitmap(R.drawable.hour_hand);
-        minuteHand = bitmap(R.drawable.minute_hand);
-        secondHand = bitmap(R.drawable.second_hand);
-        centerPin = bitmap(R.drawable.center_pin);
+        sampleTime.set(2026, Calendar.APRIL, 26, 10, 10, 32);
+        sampleTime.set(Calendar.MILLISECOND, 0);
         stepsIcon = bitmap(R.drawable.steps_icon);
         batteryIcon = bitmap(R.drawable.battery_icon);
         heartIcon = bitmap(R.drawable.heart_icon);
@@ -54,113 +51,139 @@ final class WffPreviewView extends View {
         float offsetY = (getHeight() - WFF_SIZE * scale) * 0.5f;
 
         canvas.drawColor(Color.BLACK);
-        drawBitmap(canvas, dialBackground, offsetX, offsetY, scale, 0, 0, 450, 450);
-        drawHands(canvas, offsetX, offsetY, scale);
+        drawDial(canvas, offsetX, offsetY, scale);
         drawDate(canvas, offsetX, offsetY, scale);
+        drawTime(canvas, offsetX, offsetY, scale);
+        drawDivider(canvas, offsetX, offsetY, scale);
         drawComplications(canvas, offsetX, offsetY, scale);
-        drawBitmap(canvas, centerPin, offsetX, offsetY, scale, 203, 203, 44, 44);
     }
 
     private Bitmap bitmap(int resourceId) {
         return BitmapFactory.decodeResource(getResources(), resourceId);
     }
 
+    private void drawDial(Canvas canvas, float ox, float oy, float scale) {
+        float cx = ox + 225f * scale;
+        float cy = oy + 225f * scale;
+        float radius = 225f * scale;
+
+        paint.setStyle(Paint.Style.FILL);
+        paint.setShader(new RadialGradient(
+                cx,
+                oy + 210f * scale,
+                238f * scale,
+                new int[]{Color.rgb(32, 30, 26), Color.rgb(9, 8, 7), Color.BLACK},
+                new float[]{0f, 0.58f, 1f},
+                Shader.TileMode.CLAMP));
+        canvas.drawCircle(cx, cy, radius, paint);
+        paint.setShader(null);
+
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(2.2f * scale);
+        paint.setColor(Color.rgb(216, 181, 106));
+        canvas.drawCircle(cx, cy, 218f * scale, paint);
+        paint.setStrokeWidth(0.8f * scale);
+        paint.setColor(Color.rgb(107, 79, 36));
+        canvas.drawCircle(cx, cy, 213f * scale, paint);
+    }
+
     private void drawDate(Canvas canvas, float ox, float oy, float scale) {
+        Locale locale = Locale.getDefault();
+        String pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, "EEE MMM d");
+        String date = new SimpleDateFormat(pattern, locale).format(sampleTime.getTime()).toUpperCase(locale);
+
         paint.setStyle(Paint.Style.FILL);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTypeface(light);
-        paint.setColor(Color.rgb(255, 224, 158));
-        paint.setTextSize(26f * scale);
-        paint.setLetterSpacing(0.08f);
-        drawCenteredText(canvas, "SUN", ox, oy, scale, 160, 95, 132, 34);
+        paint.setColor(Color.rgb(233, 197, 121));
+        paint.setTextSize(29f * scale);
+        drawCenteredText(canvas, date, ox, oy, scale, 62, 64, 326, 44);
+    }
 
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(1.6f * scale);
-        paint.setColor(Color.rgb(226, 171, 91));
-        canvas.drawLine(ox + 165f * scale, oy + 132f * scale, ox + 285f * scale, oy + 132f * scale, paint);
+    private void drawTime(Canvas canvas, float ox, float oy, float scale) {
+        boolean is24Hour = android.text.format.DateFormat.is24HourFormat(getContext());
+        Locale locale = Locale.getDefault();
+        String pattern = is24Hour ? "HH:mm" : "hh:mm";
+        String time = new SimpleDateFormat(pattern, locale).format(sampleTime.getTime());
 
         paint.setStyle(Paint.Style.FILL);
-        paint.setTypeface(thin);
-        paint.setTextSize(29f * scale);
-        paint.setColor(Color.rgb(255, 224, 158));
-        drawCenteredText(canvas, "APR 26", ox, oy, scale, 137, 130, 176, 41);
-        paint.setLetterSpacing(0f);
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setTypeface(medium);
+        paint.setColor(Color.rgb(255, 244, 220));
+        paint.setTextSize(136f * scale);
+        drawCenteredText(canvas, time, ox, oy, scale, 0, 92, 450, 160, true);
+
+        if (!is24Hour) {
+            paint.setTypeface(light);
+            paint.setColor(Color.rgb(233, 197, 121));
+            paint.setTextSize(14f * scale);
+            String amPm = new SimpleDateFormat("a", locale).format(sampleTime.getTime()).toUpperCase(locale);
+            drawCenteredText(canvas, amPm, ox, oy, scale, 374, 234, 50, 20);
+        }
+    }
+
+    private void drawDivider(Canvas canvas, float ox, float oy, float scale) {
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeCap(Paint.Cap.BUTT);
+        paint.setStrokeWidth(1.1f * scale);
+        paint.setColor(Color.rgb(200, 157, 71));
+        canvas.drawLine(ox + 24f * scale, oy + 260f * scale, ox + 426f * scale, oy + 260f * scale, paint);
+
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.rgb(255, 225, 160));
+        canvas.drawCircle(ox + 225f * scale, oy + 261f * scale, 3.5f * scale, paint);
     }
 
     private void drawComplications(Canvas canvas, float ox, float oy, float scale) {
-        drawBitmap(canvas, stepsIcon, ox, oy, scale, 112, 173, 31, 25);
-        drawBitmap(canvas, batteryIcon, ox, oy, scale, 314, 172, 20, 29);
-        drawBitmap(canvas, heartIcon, ox, oy, scale, 213, 280, 24, 21);
+        Locale locale = Locale.getDefault();
+        NumberFormat integerFormat = NumberFormat.getIntegerInstance(locale);
+        boolean isFrench = "fr".equals(locale.getLanguage());
+
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(1f * scale);
+        paint.setColor(Color.rgb(216, 181, 106));
+        canvas.drawLine(ox + 174f * scale, oy + 325f * scale, ox + 174f * scale, oy + 363f * scale, paint);
+        canvas.drawLine(ox + 276f * scale, oy + 325f * scale, ox + 276f * scale, oy + 363f * scale, paint);
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(ox + 174f * scale, oy + 345f * scale, 2.5f * scale, paint);
+        canvas.drawCircle(ox + 276f * scale, oy + 345f * scale, 2.5f * scale, paint);
+
+        drawBitmap(canvas, stepsIcon, ox, oy, scale, 110, 305, 28, 23);
+        drawBitmap(canvas, batteryIcon, ox, oy, scale, 215, 303, 20, 29);
+        drawBitmap(canvas, heartIcon, ox, oy, scale, 314, 305, 24, 21);
 
         paint.setStyle(Paint.Style.FILL);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTypeface(light);
         paint.setColor(Color.WHITE);
 
-        paint.setTextSize(38f * scale);
-        drawCenteredText(canvas, String.format(Locale.US, "%d", SAMPLE_STEPS), ox, oy, scale, 66, 196, 136, 43);
+        paint.setTextSize(27f * scale);
+        drawCenteredText(canvas, integerFormat.format(SAMPLE_STEPS), ox, oy, scale, 82, 331, 84, 31);
 
-        paint.setColor(Color.rgb(255, 242, 157));
-        paint.setTextSize(23f * scale);
-        drawCenteredText(canvas, "STEPS", ox, oy, scale, 68, 233, 120, 31);
-
-        paint.setColor(Color.WHITE);
-        paint.setTextSize(38f * scale);
-        drawCenteredText(canvas, String.format(Locale.US, "%d%%", SAMPLE_BATTERY), ox, oy, scale, 263, 196, 124, 43);
-
-        paint.setColor(Color.rgb(255, 242, 157));
-        paint.setTextSize(21f * scale);
-        drawCenteredText(canvas, "BATTERY", ox, oy, scale, 262, 233, 126, 31);
+        paint.setColor(Color.rgb(233, 197, 121));
+        paint.setTextSize(13f * scale);
+        drawCenteredText(canvas, isFrench ? "PAS" : "STEPS", ox, oy, scale, 88, 356, 72, 21);
 
         paint.setColor(Color.WHITE);
-        paint.setTextSize(37f * scale);
-        drawCenteredText(canvas, String.format(Locale.US, "%d", SAMPLE_HEART_RATE), ox, oy, scale, 180, 302, 90, 40);
+        paint.setTextSize(27f * scale);
+        drawCenteredText(canvas, String.format(locale, "%d%%", SAMPLE_BATTERY), ox, oy, scale, 183, 331, 84, 31);
 
-        paint.setColor(Color.rgb(255, 242, 157));
-        paint.setTextSize(21f * scale);
-        drawCenteredText(canvas, "BPM", ox, oy, scale, 190, 336, 70, 28);
-    }
+        paint.setColor(Color.rgb(233, 197, 121));
+        paint.setTextSize(13f * scale);
+        drawCenteredText(canvas, isFrench ? "BATTERIE" : "BATTERY", ox, oy, scale, 187, 356, 76, 21);
 
-    private void drawHands(Canvas canvas, float ox, float oy, float scale) {
-        Calendar sample = Calendar.getInstance();
-        sample.set(Calendar.HOUR_OF_DAY, 10);
-        sample.set(Calendar.MINUTE, 10);
-        sample.set(Calendar.SECOND, 32);
-        sample.set(Calendar.MILLISECOND, 0);
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(27f * scale);
+        drawCenteredText(canvas, String.format(locale, "%d", SAMPLE_HEART_RATE), ox, oy, scale, 284, 331, 84, 31);
 
-        float seconds = sample.get(Calendar.SECOND);
-        float minutes = sample.get(Calendar.MINUTE) + seconds / 60f;
-        float hours = (sample.get(Calendar.HOUR) % 12) + minutes / 60f;
-
-        drawRotatedBitmap(canvas, hourHand, ox, oy, scale, 207, 101, 36, 140, 0.5f, 0.884f, hours * 30f);
-        drawRotatedBitmap(canvas, minuteHand, ox, oy, scale, 209, 68, 33, 176, 0.5f, 0.890f, minutes * 6f);
-        drawRotatedBitmap(canvas, secondHand, ox, oy, scale, 221, 53, 8, 206, 0.5f, 0.836f, seconds * 6f);
+        paint.setColor(Color.rgb(233, 197, 121));
+        paint.setTextSize(13f * scale);
+        drawCenteredText(canvas, "BPM", ox, oy, scale, 291, 356, 70, 21);
     }
 
     private void drawBitmap(Canvas canvas, Bitmap bitmap, float ox, float oy, float scale, float x, float y, float width, float height) {
         RectF dest = rect(ox, oy, scale, x, y, width, height);
         canvas.drawBitmap(bitmap, null, dest, paint);
-    }
-
-    private void drawRotatedBitmap(
-            Canvas canvas,
-            Bitmap bitmap,
-            float ox,
-            float oy,
-            float scale,
-            float x,
-            float y,
-            float width,
-            float height,
-            float pivotX,
-            float pivotY,
-            float angle) {
-        float px = ox + (x + width * pivotX) * scale;
-        float py = oy + (y + height * pivotY) * scale;
-        canvas.save();
-        canvas.rotate(angle, px, py);
-        drawBitmap(canvas, bitmap, ox, oy, scale, x, y, width, height);
-        canvas.restore();
     }
 
     private RectF rect(float ox, float oy, float scale, float x, float y, float width, float height) {
@@ -172,13 +195,32 @@ final class WffPreviewView extends View {
     }
 
     private void drawCenteredText(Canvas canvas, String text, float ox, float oy, float scale, float x, float y, float width, float height) {
+        drawCenteredText(canvas, text, ox, oy, scale, x, y, width, height, false);
+    }
+
+    private void drawCenteredText(
+            Canvas canvas,
+            String text,
+            float ox,
+            float oy,
+            float scale,
+            float x,
+            float y,
+            float width,
+            float height,
+            boolean softGlow) {
         Paint.FontMetrics metrics = paint.getFontMetrics();
         int textColor = paint.getColor();
         float centerX = ox + (x + width * 0.5f) * scale;
         float centerY = oy + (y + height * 0.5f) * scale;
         float baseline = centerY - (metrics.ascent + metrics.descent) * 0.5f;
-        paint.setColor(Color.BLACK);
-        canvas.drawText(text, centerX + scale, baseline + scale, paint);
+        if (softGlow) {
+            paint.setColor(Color.rgb(74, 55, 25));
+            canvas.drawText(text, centerX + 1.4f * scale, baseline + 1.4f * scale, paint);
+        } else {
+            paint.setColor(Color.BLACK);
+            canvas.drawText(text, centerX + scale, baseline + scale, paint);
+        }
         paint.setColor(textColor);
         canvas.drawText(text, centerX, baseline, paint);
     }
