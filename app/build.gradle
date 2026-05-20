@@ -11,11 +11,11 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.cyberpat.luxurypixel.watchface.preview"
+    namespace "com.cyberpat.luxurypixel.watchface.digital"
     compileSdk 35
 
     defaultConfig {
-        applicationId "com.cyberpat.luxurypixel.watchface.preview"
+        applicationId "com.cyberpat.luxurypixel.watchface.digital"
         minSdk 30
         targetSdk 35
         versionCode 1

@@ -12,7 +12,7 @@ import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.view.View;
 
-import com.cyberpat.luxurypixel.watchface.preview.R;
+import com.cyberpat.luxurypixel.watchface.digital.R;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
