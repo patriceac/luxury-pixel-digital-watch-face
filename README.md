@@ -7,7 +7,7 @@ Luxury Pixel 3 Digital Watch Face is a Wear OS watch face project with a preview
 - `app/` contains the Android preview app and Java renderer implementation.
 - `watchface/` contains the Wear OS Watch Face Format package.
 - `store-assets/` contains Play Store screenshots, icon, feature graphic, and listing copy.
-- `luxury-pixel-privacy/` contains the public privacy policy HTML.
+- `luxury-pixel-privacy/` contains the separate GitHub Pages download hub and public privacy policy HTML.
 
 ## Build
 
