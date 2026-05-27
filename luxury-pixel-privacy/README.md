@@ -1,5 +1,7 @@
 # Luxury Pixel GitHub Pages
 
+Live site: https://patriceac.github.io/luxury-pixel/
+
 This repository hosts the public landing page and privacy policy for the Luxury Pixel Wear OS watch faces.
 
 GitHub Pages should serve `index.html` from this repository root. The privacy policy remains available at `privacy.html`.
