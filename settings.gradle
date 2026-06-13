@@ -17,3 +17,4 @@ dependencyResolutionManagement {
 rootProject.name = "Luxury Pixel 3 Watch Face"
 include ":app"
 include ":watchface"
+include ":phone"

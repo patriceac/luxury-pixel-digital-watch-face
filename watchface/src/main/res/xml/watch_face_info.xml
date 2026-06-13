@@ -3,4 +3,5 @@
     <Preview value="@drawable/preview" />
     <AvailableInRetail value="true" />
     <MultipleInstancesAllowed value="true" />
+    <Editable value="true" />
 </WatchFaceInfo>

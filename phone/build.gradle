@@ -11,15 +11,20 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.cyberpat.luxurypixel.watchface.digital"
+    namespace "com.cyberpat.luxurypixel.watchface.phone"
     compileSdk 35
 
     defaultConfig {
-        applicationId "com.cyberpat.luxurypixel.watchface.digital"
-        minSdk 33
+        applicationId "com.cyberpat.luxurypixel.watchface.digital.preview"
+        minSdk 30
         targetSdk 35
-        versionCode 42
-        versionName "1.0.41"
+        versionCode 1
+        versionName "1.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     signingConfigs {
@@ -34,13 +39,12 @@ android {
     }
 
     buildTypes {
-        debug {
-            minifyEnabled false
-        }
         release {
-            minifyEnabled true
-            shrinkResources false
             signingConfig signingConfigs.release
         }
     }
+}
+
+dependencies {
+    implementation "com.google.android.gms:play-services-wearable:20.0.1"
 }

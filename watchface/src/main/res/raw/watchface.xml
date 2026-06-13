@@ -79,6 +79,94 @@
             </Ellipse>
         </PartDraw>
 
+        <ComplicationSlot
+            x="105"
+            y="232"
+            width="240"
+            height="58"
+            slotId="22"
+            supportedTypes="SHORT_TEXT"
+            displayName="alarm_complication_name"
+            isCustomizable="FALSE">
+            <DefaultProviderPolicy
+                defaultSystemProvider="EMPTY"
+                defaultSystemProviderType="SHORT_TEXT"
+                primaryProvider="com.cyberpat.luxurypixel.watchface.digital.preview/com.luxurypixel.watchface.WideNextAlarmComplicationDataSourceService"
+                primaryProviderType="SHORT_TEXT" />
+            <BoundingRoundBox x="0" y="0" width="240" height="58" cornerRadius="13" />
+            <Complication type="SHORT_TEXT">
+                <Group x="0" y="12" width="240" height="34" name="next_alarm_chip_wide" id="COMPLICATION.22" hint="COMPLICATION_SHORT_TEXT">
+                    <PartDraw x="0" y="0" width="240" height="34">
+                        <Rectangle x="0" y="0" width="240" height="34" cornerRadius="13">
+                            <Fill color="#E8050504" />
+                            <Stroke color="#96C89D47" thickness="0.7" />
+                        </Rectangle>
+                    </PartDraw>
+                    <PartImage x="18" y="7" width="20" height="20">
+                        <Image resource="alarm_icon" />
+                    </PartImage>
+                    <PartText x="44" y="1" width="180" height="32" name="next_alarm_text_wide" hint="TEXT">
+                        <Text align="CENTER" maxLines="1" ellipsis="TRUE">
+                            <Font family="SYNC_TO_DEVICE" size="24" color="#FFE1A0" weight="LIGHT">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+        </ComplicationSlot>
+
+        <ComplicationSlot
+            x="151"
+            y="232"
+            width="148"
+            height="58"
+            slotId="21"
+            supportedTypes="SHORT_TEXT"
+            displayName="alarm_complication_name"
+            isCustomizable="FALSE">
+            <DefaultProviderPolicy
+                defaultSystemProvider="EMPTY"
+                defaultSystemProviderType="SHORT_TEXT"
+                primaryProvider="com.cyberpat.luxurypixel.watchface.digital.preview/com.luxurypixel.watchface.NextAlarmComplicationDataSourceService"
+                primaryProviderType="SHORT_TEXT" />
+            <BoundingRoundBox x="0" y="0" width="148" height="58" cornerRadius="13" />
+            <Complication type="SHORT_TEXT">
+                <Group x="0" y="12" width="148" height="34" name="next_alarm_chip" id="COMPLICATION.21" hint="COMPLICATION_SHORT_TEXT">
+                    <PartDraw x="0" y="0" width="148" height="34">
+                        <Rectangle x="0" y="0" width="148" height="34" cornerRadius="13">
+                            <Fill color="#E8050504" />
+                            <Stroke color="#96C89D47" thickness="0.7" />
+                        </Rectangle>
+                    </PartDraw>
+                    <PartImage x="18" y="7" width="20" height="20">
+                        <Image resource="alarm_icon" />
+                    </PartImage>
+                    <PartText x="44" y="1" width="88" height="32" name="next_alarm_text" hint="TEXT">
+                        <Text align="CENTER" maxLines="1" ellipsis="TRUE">
+                            <Font family="SYNC_TO_DEVICE" size="24" color="#FFE1A0" weight="LIGHT">
+                                <Template><![CDATA[%s]]>
+                                    <Parameter expression="[COMPLICATION.TEXT]" />
+                                </Template>
+                            </Font>
+                        </Text>
+                    </PartText>
+                </Group>
+            </Complication>
+        </ComplicationSlot>
+
+        <Group x="105" y="244" width="240" height="34" name="next_alarm_tap_area">
+            <TouchAction actionId="TAP_0" type="TAP" />
+            <Launch target="ALARM" actionBy="TAP_0" />
+            <PartDraw x="0" y="0" width="240" height="34" alpha="0">
+                <Rectangle x="0" y="0" width="240" height="34" cornerRadius="13">
+                    <Fill color="#00000000" />
+                </Rectangle>
+            </PartDraw>
+        </Group>
+
         <PartDraw x="0" y="0" width="450" height="450">
             <Line startX="174" startY="325" endX="174" endY="363">
                 <Stroke color="#D8B56A" thickness="1" />
@@ -185,5 +273,6 @@
                 </PartText>
             </Default>
         </Condition>
+
     </Scene>
 </WatchFace>

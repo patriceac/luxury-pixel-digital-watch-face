@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Luxury Pixel Digital Preview</string>
+    <string name="alarm_complication_label">Prochaine alarme</string>
     <string name="watch_face_description">Cadran Pixel Watch numérique noir et champagne luxueux.</string>
 </resources>

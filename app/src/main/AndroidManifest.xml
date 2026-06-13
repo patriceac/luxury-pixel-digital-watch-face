@@ -4,6 +4,7 @@
     <uses-feature android:name="android.hardware.type.watch" />
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="false"
@@ -25,6 +26,62 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="com.luxurypixel.watchface.NextAlarmComplicationDataSourceService"
+            android:exported="true"
+            android:icon="@drawable/ic_alarm_complication"
+            android:label="@string/alarm_complication_label"
+            android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
+            <intent-filter>
+                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.wearable.complications.SUPPORTED_TYPES"
+                android:value="SHORT_TEXT" />
+            <meta-data
+                android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
+                android:value="300" />
+        </service>
+
+        <service
+            android:name="com.luxurypixel.watchface.WideNextAlarmComplicationDataSourceService"
+            android:exported="true"
+            android:icon="@drawable/ic_alarm_complication"
+            android:label="@string/alarm_complication_label"
+            android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER">
+            <intent-filter>
+                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.wearable.complications.SUPPORTED_TYPES"
+                android:value="SHORT_TEXT" />
+            <meta-data
+                android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
+                android:value="300" />
+        </service>
+
+        <receiver
+            android:name="com.luxurypixel.watchface.AlarmComplicationUpdateReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.app.action.NEXT_ALARM_CLOCK_CHANGED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="com.luxurypixel.watchface.REQUEST_ALARM_COMPLICATION_UPDATE" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.luxurypixel.watchface.PhoneAlarmDataListenerService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+                <data
+                    android:host="*"
+                    android:path="/luxury_pixel/next_alarm"
+                    android:scheme="wear" />
+            </intent-filter>
+        </service>
 
         <service
             android:name="com.luxurypixel.watchface.LuxuryWatchFaceService"

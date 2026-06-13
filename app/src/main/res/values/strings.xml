@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Luxury Pixel Digital Preview</string>
+    <string name="alarm_complication_label">Next alarm</string>
     <string name="watch_face_description">Luxury black and champagne digital Pixel Watch face.</string>
 </resources>
